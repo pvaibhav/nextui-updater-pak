@@ -1,6 +1,6 @@
 use crate::{
     app_state::{AppStateManager, Progress},
-    github::ReleaseAndTag,
+    github::{Release, ReleaseAndTag},
     Result, SDCARD_ROOT,
 };
 use bytes::Bytes;
@@ -16,6 +16,18 @@ use std::{
 };
 
 mod fetching;
+
+const FIRMWARE_REPOSITORY: &str = "pvaibhav/NextUI";
+const UPDATER_REPOSITORY: &str = "pvaibhav/nextui-updater-pak";
+
+fn firmware_releases(releases: Vec<Release>) -> Vec<Release> {
+    let tag_pattern = Regex::new(r"^v[0-9]+(?:\.[0-9]+)*-pvaibhav\.[0-9]+$")
+        .expect("Invalid firmware tag pattern");
+    releases
+        .into_iter()
+        .filter(|release| tag_pattern.is_match(&release.tag_name))
+        .collect()
+}
 
 fn extract_zip<T: Fn(&str) -> bool>(
     bytes: Bytes,
@@ -67,7 +79,7 @@ pub fn self_update(app_state: &AppStateManager) -> Result<()> {
 
     println!("Fetching latest updater release...");
 
-    let release = fetch_latest_release("LoveRetro/nextui-updater-pak")?;
+    let release = fetch_latest_release(UPDATER_REPOSITORY)?;
 
     println!("Latest updater release: {release:?}");
 
@@ -133,12 +145,12 @@ pub fn self_update(app_state: &AppStateManager) -> Result<()> {
 pub fn do_nextui_release_check(app_state: &AppStateManager) {
     // Fetch latest release information
     app_state.start_operation("Fetching latest NextUI release...");
-    let repo = "LoveRetro/NextUI";
+    let repo = FIRMWARE_REPOSITORY;
 
     // Fetch latest releases information
     app_state.start_operation("Fetching latest NextUI releases...");
     let latest_releases = match fetch_releases(repo) {
-        Ok(releases) => releases,
+        Ok(releases) => firmware_releases(releases),
         Err(err) => {
             // Failed connection
             println!("Fetching releases failed: {err:?}");
@@ -148,8 +160,8 @@ pub fn do_nextui_release_check(app_state: &AppStateManager) {
     };
     if latest_releases.is_empty() {
         // Connected, but no results
-        println!("Fetching releases returned 0 releases");
-        app_state.set_operation_failed("Fetching releases returned 0 releases");
+        println!("No pvaibhav firmware releases found");
+        app_state.set_operation_failed("No pvaibhav firmware releases found");
         return;
     }
 
@@ -335,5 +347,56 @@ pub fn update_nextui(app_state: &AppStateManager, full: bool) -> Result<()> {
     match std::process::Command::new("reboot").output() {
         Ok(_) => Ok(()),
         Err(e) => Err(Box::new(e)),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::firmware_releases;
+    use crate::github::{Asset, Release};
+
+    #[test]
+    fn offers_only_fork_firmware_and_preserves_release_order_and_assets() {
+        let tags = [
+            "v6.15.0-pvaibhav.2",
+            "h700-rc11",
+            "v6.15.0",
+            "v6.15.0-pvaibhav.1",
+            "v123-pvaibhav.12",
+            "v6.15.0-pvaibhav.1-extra",
+            "v6.15.0-pvaibhav.",
+            "v6..15-pvaibhav.1",
+        ];
+        let releases = tags
+            .into_iter()
+            .map(|tag| Release {
+                tag_name: tag.to_owned(),
+                assets: vec![Asset {
+                    name: format!("NextUI-{tag}-base.zip"),
+                    url: format!("https://example.com/{tag}"),
+                }],
+            })
+            .collect();
+        let releases = firmware_releases(releases);
+        assert_eq!(
+            releases
+                .iter()
+                .map(|release| release.tag_name.as_str())
+                .collect::<Vec<_>>(),
+            [
+                "v6.15.0-pvaibhav.2",
+                "v6.15.0-pvaibhav.1",
+                "v123-pvaibhav.12"
+            ]
+        );
+        assert_eq!(
+            releases[0].assets[0].name,
+            "NextUI-v6.15.0-pvaibhav.2-base.zip"
+        );
+        assert_eq!(
+            releases[0].assets[0].url,
+            "https://example.com/v6.15.0-pvaibhav.2"
+        );
+        assert!(firmware_releases(Vec::new()).is_empty());
     }
 }

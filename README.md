@@ -2,11 +2,13 @@
 
 # NextUI OTA Updater PAK
 
-A PAK for updating NextUI on-device (aka OTA), tested on the TrimUI Brick (but might work on the Smart Pro as well). Wifi required (obviously).
+This fork updates devices from [pvaibhav/NextUI](https://github.com/pvaibhav/NextUI) releases tagged `v<version>-pvaibhav.<revision>`. It gets updater self-updates from [pvaibhav/nextui-updater-pak](https://github.com/pvaibhav/nextui-updater-pak). Wi-Fi is required.
+
+Based on the [official NextUI updater by LanderN](https://github.com/LoveRetro/nextui-updater-pak).
 
 ## Installation
 
-Unzip the `nextui-updater-pak.zip` file to the root of your SD card (merge the contents).
+The pvaibhav firmware includes this updater. To install it separately, extract `nextui.updater.pakz` (a ZIP archive) to the root of your SD card and merge the contents.
 
 ## Controls
 
@@ -29,7 +31,7 @@ The compiled binary will be in `target/aarch64-unknown-linux-gnu/release/nextui-
 scripts/create_pak.sh
 ```
 
-The zip file will be in `./nextui-updater-pak.zip`.
+The package will be in `./nextui.updater.pakz`, with separate ZIPs for each platform.
 
 ## License
 

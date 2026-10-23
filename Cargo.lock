@@ -992,7 +992,7 @@ dependencies = [
 
 [[package]]
 name = "nextui-updater-rs"
-version = "0.8.2"
+version = "0.8.2-pvaibhav.1"
 dependencies = [
  "bytes",
  "const_format",

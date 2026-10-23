@@ -1,18 +1,22 @@
 {
   "name": "Updater",
-  "version": "0.8.2",
+  "version": "0.8.2-pvaibhav.1",
   "type": "TOOL",
-  "description": "Update NextUI over-the-air!",
+  "description": "Update the pvaibhav NextUI fork over the air.",
   "author": "LanderN",
-  "repo_url": "https://github.com/LoveRetro/nextui-updater-pak",
+  "repo_url": "https://github.com/pvaibhav/nextui-updater-pak",
   "release_filename": "nextui.updater.pakz",
   "banners": {
     "BRICK": "doc/screenshot.png"
   },
   "platforms": [
-    "tg5040", "tg5050", "my355", "h700"
+    "tg5040",
+    "tg5050",
+    "my355",
+    "h700"
   ],
   "changelog": {
+    "0.8.2-pvaibhav.1": "Follow pvaibhav firmware releases and updater self-updates.",
     "0.8.2": "h700 related issues (UI scaling, button mapping).",
     "0.8.1": "Fix glibc linkage.",
     "0.8.0": "h700 support (8Anbernic RG xx).",

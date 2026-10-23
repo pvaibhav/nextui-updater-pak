@@ -5,7 +5,7 @@ set -euo pipefail
 DIST_DIR="dist"
 PAK_DIR_NAME="Updater"
 UPDATER_BINARY="target/aarch64-unknown-linux-gnu/release/nextui-updater-rs"
-ZIP_FILE="nextui.updater.zip"
+ZIP_FILE="nextui.updater.pakz"
 
 rm -rf "${DIST_DIR}"
 
@@ -35,7 +35,7 @@ EOF
     chmod +x "${LAUNCH_SCRIPT}"
 done
 
-#(cd "${DIST_DIR}" && zip -r "../${ZIP_FILE}" .)
+(cd "${DIST_DIR}" && zip -r "../${ZIP_FILE}" Tools)
 for PLATFORM in tg5040 tg5050 my355 h700; do
     (cd "${DIST_DIR}/Tools/${PLATFORM}/${PAK_DIR_NAME}.pak" && zip -r "../../../../${PAK_DIR_NAME}_${PLATFORM}.zip" .)
 done
