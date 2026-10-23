@@ -8,7 +8,7 @@ Based on the [official NextUI updater by LanderN](https://github.com/LoveRetro/n
 
 ## Installation
 
-The pvaibhav firmware includes this updater. To install it separately, extract `nextui.updater.pakz` (a ZIP archive) to the root of your SD card and merge the contents.
+The pvaibhav firmware includes **Updater (pvaibhav)** as a separate tool. Pak Store updates to the official **Updater** cannot overwrite it. To install it separately, extract `nextui.updater.pakz` (a ZIP archive) to the root of your SD card and merge the contents.
 
 ## Controls
 

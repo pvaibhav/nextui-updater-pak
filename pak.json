@@ -1,5 +1,5 @@
 {
-  "name": "Updater",
+  "name": "Updater (pvaibhav)",
   "version": "0.8.2-pvaibhav.1",
   "type": "TOOL",
   "description": "Update the pvaibhav NextUI fork over the air.",
@@ -16,7 +16,7 @@
     "h700"
   ],
   "changelog": {
-    "0.8.2-pvaibhav.1": "Follow pvaibhav firmware releases and updater self-updates.",
+    "0.8.2-pvaibhav.1": "Follow pvaibhav firmware and updater releases under a separate Pak Store identity.",
     "0.8.2": "h700 related issues (UI scaling, button mapping).",
     "0.8.1": "Fix glibc linkage.",
     "0.8.0": "h700 support (8Anbernic RG xx).",

@@ -3,7 +3,7 @@
 set -euo pipefail
 
 DIST_DIR="dist"
-PAK_DIR_NAME="Updater"
+PAK_DIR_NAME="Updater (pvaibhav)"
 UPDATER_BINARY="target/aarch64-unknown-linux-gnu/release/nextui-updater-rs"
 ZIP_FILE="nextui.updater.pakz"
 
@@ -20,14 +20,14 @@ for PLATFORM in tg5040 tg5050 my355 h700; do
     cat > "${LAUNCH_SCRIPT}" <<EOF
 #!/bin/sh
 
-cd \$(dirname "\$0")
+cd "\$(dirname "\$0")" || exit 1
 :> logs.txt
 
 while : ; do
 
-./nextui-updater 2>&1 >> logs.txt
+./nextui-updater >> logs.txt 2>&1
 
-[[ \$? -eq 5 ]] || break
+[ "\$?" -eq 5 ] || break
 
 done
 
